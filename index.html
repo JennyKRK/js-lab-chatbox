@@ -1,8 +1,8 @@
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>JS Lab</title>
-  <style>
+    <meta charset="UTF-8">
+    <title>JS Lab</title>
+    <style>
         body {
             margin: 0;
             padding: 0;
@@ -11,6 +11,11 @@
 
         h1 {
             color: #0B3954;
+            text-align:center;
+        }
+
+        div {
+            background-color: #FFEDE0;
         }
 
         .blue {
@@ -21,62 +26,115 @@
             color: red;
         }
 
+
     </style>
 </head>
 <body>
 <div id="app">
-  <h1 id="main-header">Pan Bot chce z Tobą porozmawiać</h1>
-  <p>Oto nasza rozmowa:</p>
-  <div class = rozmowa>
-    <ul>
-      <li class = blue>Cześć, jestem botem. Jeśli chcesz ze mną porozmawiać, wpisz wiadomość w okienko poniżej. <br>
-        Możesz mi powiedzieć "cześć" albo spytać: "kim jesteś?", "ile masz lat?", "skąd jesteś?", "jak się nazywasz?". <br>
-        Nie mów do mnie: "jesteś głupi!" albo "ty chamie!". Uprzedzam, że jestem wrażliwy na niektóre przekleństwa jak "motyla noga".
+    <h1 id="main-header">Pan Bot chce z Tobą porozmawiać</h1>
+    <p>Oto nasza rozmowa:</p>
 
-      </li>
+    <ul>
+        <li class=blue>Cześć, jestem botem. Jeśli chcesz ze mną porozmawiać, wpisz wiadomość w okienko poniżej. <br>
+            Możesz mi powiedzieć "cześć" albo spytać: "kim jesteś?", "ile masz lat?", "skąd jesteś?", "jak się
+            nazywasz?". <br>
+            Nie mów do mnie: "jesteś głupi!" albo "ty chamie!". Uprzedzam, że jestem wrażliwy na niektóre
+            przekleństwa jak "motyla noga". Daj mi trochę czasu.
+            <br> Możesz spytać o moją wersję "/version" albo o pogodę w Krakowie "/pogoda kraków".
+
+        </li>
     </ul>
-  </div>
-  <p><input type="text" id="myTextField">
-  <p> <button type="button" onclick="sendAMessage()">Wyślij wiadomość</button></p>
 
 </div>
+
+    <p><input type="text" id="myTextField">
+    <p>
+    <p>
+        <button type="button" onclick="sendAMessage()">Wyślij wiadomość</button>
+    </p>
+
+
 <script>
 
-  function sendAMessage(){
+function sendAMessage(){
   var yourMessage = document.getElementById('myTextField').value;
   analyseTheMessage(yourMessage);
   document.getElementById('myTextField').value = "";
-  }
-
-  function appendTheMessage(someText){
-    let listItem = document.createElement('li');
-    listItem.innerText = someText;
-    document.querySelector("#app ul li:last-child").after(listItem);
-  }
-
-  function alertMe(){
-    alert('czesc');
-  }
-
-  document.onkeypress = keyPress;
-
-function keyPress(e){
-  var x = e || window.event;
-  var key = (x.keyCode || x.which);
-  if(key == 13 || key == 3){
-   sendAMessage();
-  }
 }
 
 function analyseTheMessage(someText){
-  if (checkForProfanities(someText) == true){
+  if (checkForProfanities(someText) == false && isItFunction(someText) == true){
+      setTimeout(() => replyToTheMessage(someText), 2000);
+  }
+  else if (checkForProfanities(someText) == false && isItFunction(someText) == false)
+  {
+      appendTheMessage(someText);
+      setTimeout(() => replyToTheMessage(someText), 2000);
+  }
+
+  else {
       alert("Nie wolno");
       scoldTheNaughtyUser();
   }
-  else {
-      appendTheMessage(someText)
-      replyToTheMessage(someText);
+
+}
+
+function checkForProfanities(textToReact){
+  switch(textToReact) {
+      case "motyla noga":
+          return true
+          break;
+
+      case "kurwa":
+          return true
+          break;
+
+      case "chuj":
+          return true
+          break;
+
+      case "ty chuju!":
+          return true
+          break;
+
+      case "ja pierdolę":
+          return true
+          break;
+
+      default:
+          return false
   }
+
+}
+
+function isItFunction(textToReact){
+  switch(textToReact) {
+      case "/version":
+          return true
+          break;
+
+      case "/pogoda kraków":
+          return true
+          break;
+
+      default:
+          return false
+      }
+}
+
+
+
+function scoldTheNaughtyUser(){
+   let listItem = document.createElement('li');
+   listItem.innerText = "Proszę nie używaj takich słów. Jest mi bardzo przykro. Zraniłeś moje uczucia. Czuję się smutny :(((((((";
+   listItem.classList.add('red');
+   document.querySelector("#app ul li:last-child").after(listItem);
+}
+
+function appendTheMessage(someText){
+  let listItem = document.createElement('li');
+  listItem.innerText = someText;
+  document.querySelector("#app ul li:last-child").after(listItem);
 }
 
 function replyToTheMessage(someText){
@@ -87,14 +145,6 @@ function replyToTheMessage(someText){
   listItem.classList.add('blue');
   document.querySelector("#app ul li:last-child").after(listItem);
 }
-
-
-  function scoldTheNaughtyUser(){
-    let listItem = document.createElement('li');
-    listItem.innerText = "Proszę nie używaj takich słów. Jest mi bardzo przykro. Zraniłeś moje uczucia. Czuję się smutny :(((((((";
-    listItem.classList.add('red');
-    document.querySelector("#app ul li:last-child").after(listItem);
-  }
 
 function returnAnswer(textToReact){
   switch(textToReact) {
@@ -158,72 +208,29 @@ function returnAnswer(textToReact){
           return "Ja też nic nie wiem."
           break;
 
+      case "/version":
+          return "---------->najnowsza wersja 1.1.15"
+          break;
+
+      case "/pogoda kraków":
+          return "---------->  Pogoda w Krakowie: Jest zimno i pada"
+          break;
+
       default:
           return "Fajnie."
   }
 }
 
-function checkForProfanities(textToReact){
-  switch(textToReact) {
-      case "motyla noga":
-          return true
-          break;
+document.onkeypress = keyPress;
 
-      case "kurwa":
-          return true
-          break;
-
-      case "chuj":
-          return true
-          break;
-
-      case "ty chuju!":
-          return true
-          break;
-
-      case "ja pierdolę":
-          return true
-          break;
-
-      default:
-          return false
-  }
-
+function keyPress(e){
+     var x = e || window.event;
+     var key = (x.keyCode || x.which);
+     if(key == 13 || key == 3){
+      sendAMessage();
+     }
 }
 
-<!--function replyToTheMessage(someText){-->
-<!--  if (someText == "hello"){-->
-<!--  let listItem = document.createElement('li');-->
-<!--  listItem.innerText = "badz oryginalniejszy, prosze";-->
-<!--  document.querySelector("#app ul li:last-child").after(listItem);-->
-<!--  }-->
-<!--}-->
-
-//ta ponizej dzialala dobrze
-<!--function replyToTheMessage(someText){-->
-<!--  var myTextToSay = "";-->
-<!--  if (someText == "hello"){-->
-<!--  myTextToSay = "badz oryginalny";-->
-<!--  let listItem = document.createElement('li');-->
-<!--  listItem.innerText = myTextToSay;-->
-<!--  document.querySelector("#app ul li:last-child").after(listItem);-->
-<!--  }-->
-<!--  else {-->
-<!--  myTextToSay = "ładna pogoda. A co u Ciebie?";-->
-<!--  let listItem = document.createElement('li');-->
-<!--  listItem.innerText = myTextToSay;-->
-<!--  document.querySelector("#app ul li:last-child").after(listItem);-->
-<!--  }-->
-<!--}-->
-
-<!--function returnAnswer(textToReact){-->
-<!--  if (textToReact == "hello"){-->
-<!--    return "bądź oryginalniejszy"-->
-<!--  }-->
-<!--  else {-->
-<!--  return "Aha. Fajnie.";-->
-<!--  }-->
-<!--}-->
 
 
 </script>
