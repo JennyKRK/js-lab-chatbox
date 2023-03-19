@@ -1,0 +1,230 @@
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Lab</title>
+  <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, serif;
+        }
+
+        h1 {
+            color: #0B3954;
+        }
+
+        .blue {
+            color: blue;
+        }
+
+        .red {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app">
+  <h1 id="main-header">Pan Bot chce z Tobą porozmawiać</h1>
+  <p>Oto nasza rozmowa:</p>
+  <div class = rozmowa>
+    <ul>
+      <li class = blue>Cześć, jestem botem. Jeśli chcesz ze mną porozmawiać, wpisz wiadomość w okienko poniżej. <br>
+        Możesz mi powiedzieć "cześć" albo spytać: "kim jesteś?", "ile masz lat?", "skąd jesteś?", "jak się nazywasz?". <br>
+        Nie mów do mnie: "jesteś głupi!" albo "ty chamie!". Uprzedzam, że jestem wrażliwy na niektóre przekleństwa jak "motyla noga".
+
+      </li>
+    </ul>
+  </div>
+  <p><input type="text" id="myTextField">
+  <p> <button type="button" onclick="sendAMessage()">Wyślij wiadomość</button></p>
+
+</div>
+<script>
+
+  function sendAMessage(){
+  var yourMessage = document.getElementById('myTextField').value;
+  analyseTheMessage(yourMessage);
+  document.getElementById('myTextField').value = "";
+  }
+
+  function appendTheMessage(someText){
+    let listItem = document.createElement('li');
+    listItem.innerText = someText;
+    document.querySelector("#app ul li:last-child").after(listItem);
+  }
+
+  function alertMe(){
+    alert('czesc');
+  }
+
+  document.onkeypress = keyPress;
+
+function keyPress(e){
+  var x = e || window.event;
+  var key = (x.keyCode || x.which);
+  if(key == 13 || key == 3){
+   sendAMessage();
+  }
+}
+
+function analyseTheMessage(someText){
+  if (checkForProfanities(someText) == true){
+      alert("Nie wolno");
+      scoldTheNaughtyUser();
+  }
+  else {
+      appendTheMessage(someText)
+      replyToTheMessage(someText);
+  }
+}
+
+function replyToTheMessage(someText){
+  var myTextToSay = "";
+  myTextToSay = returnAnswer(someText);
+  let listItem = document.createElement('li');
+  listItem.innerText = myTextToSay;
+  listItem.classList.add('blue');
+  document.querySelector("#app ul li:last-child").after(listItem);
+}
+
+
+  function scoldTheNaughtyUser(){
+    let listItem = document.createElement('li');
+    listItem.innerText = "Proszę nie używaj takich słów. Jest mi bardzo przykro. Zraniłeś moje uczucia. Czuję się smutny :(((((((";
+    listItem.classList.add('red');
+    document.querySelector("#app ul li:last-child").after(listItem);
+  }
+
+function returnAnswer(textToReact){
+  switch(textToReact) {
+      case "hello":
+          return "Bądź oryginalniejszy"
+          break;
+
+      case "cześć":
+          return "cześć. Miło mi Cię poznać"
+          break;
+
+      case "ile masz lat?":
+          return "Mniej niż rok..."
+          break;
+
+      case "jak się nazywasz?":
+          return "Pan Bot. A Ty?"
+          break;
+
+      case "Pan z Wami":
+          return "I z duchem Twoim"
+          break;
+
+      case "kim jesteś?":
+          return "Jestem zwykłym botem"
+          break;
+
+      case "co mam napisać?":
+          return "Nie wiem..."
+          break;
+
+      case "jak się masz?":
+          return "Jako tako. Nie jest źle"
+          break;
+
+      case "co robisz?":
+          return "W sumie nic nie robię. Wiszę sobie w sieci. A Ty?"
+          break;
+
+      case "skąd jesteś?":
+          return "Z pliczku. A Ty?"
+          break;
+
+      case "ty chamie!":
+          return "Sam jesteś cham!"
+          break;
+
+      case "jesteś głupi!":
+          return "Sam jesteś głupi!"
+          break;
+
+      case "przepraszam":
+          return "OK. Nie rób tak więcej. Było mi bardzo przykro."
+          break;
+
+      case "Przepraszam":
+          return "OK. Nie rób tak więcej. Było mi bardzo przykro."
+          break;
+
+      case "nie wiem":
+          return "Ja też nic nie wiem."
+          break;
+
+      default:
+          return "Fajnie."
+  }
+}
+
+function checkForProfanities(textToReact){
+  switch(textToReact) {
+      case "motyla noga":
+          return true
+          break;
+
+      case "kurwa":
+          return true
+          break;
+
+      case "chuj":
+          return true
+          break;
+
+      case "ty chuju!":
+          return true
+          break;
+
+      case "ja pierdolę":
+          return true
+          break;
+
+      default:
+          return false
+  }
+
+}
+
+<!--function replyToTheMessage(someText){-->
+<!--  if (someText == "hello"){-->
+<!--  let listItem = document.createElement('li');-->
+<!--  listItem.innerText = "badz oryginalniejszy, prosze";-->
+<!--  document.querySelector("#app ul li:last-child").after(listItem);-->
+<!--  }-->
+<!--}-->
+
+//ta ponizej dzialala dobrze
+<!--function replyToTheMessage(someText){-->
+<!--  var myTextToSay = "";-->
+<!--  if (someText == "hello"){-->
+<!--  myTextToSay = "badz oryginalny";-->
+<!--  let listItem = document.createElement('li');-->
+<!--  listItem.innerText = myTextToSay;-->
+<!--  document.querySelector("#app ul li:last-child").after(listItem);-->
+<!--  }-->
+<!--  else {-->
+<!--  myTextToSay = "ładna pogoda. A co u Ciebie?";-->
+<!--  let listItem = document.createElement('li');-->
+<!--  listItem.innerText = myTextToSay;-->
+<!--  document.querySelector("#app ul li:last-child").after(listItem);-->
+<!--  }-->
+<!--}-->
+
+<!--function returnAnswer(textToReact){-->
+<!--  if (textToReact == "hello"){-->
+<!--    return "bądź oryginalniejszy"-->
+<!--  }-->
+<!--  else {-->
+<!--  return "Aha. Fajnie.";-->
+<!--  }-->
+<!--}-->
+
+
+</script>
+</body>
